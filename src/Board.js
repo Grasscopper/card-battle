@@ -22,12 +22,25 @@ const Board = (props) => {
     props.moves.deployScout()
   }
 
+  const addRifle = (event) => {
+    event.preventDefault()
+    props.moves.addRifle()
+  }
+
+  const endPhase = (event) => {
+    event.preventDefault()
+    props.events.endPhase()
+  }
+
   return (
     <div>
     <section className="hero">
     <div className="hero-body">
     <p className="title">
     Card Battle
+    </p>
+    <p className="title" style={{ color: "#F14667" }}>
+    {props.G.error}
     </p>
     <p className="title">
     PLAYER GMP: {props.G.gmp}
@@ -42,7 +55,7 @@ const Board = (props) => {
 
 
       <div className="columns is-multiline">
-        <div className="column"
+        <div className="column is-4"
         style={{ border: "solid", marginLeft: 10, marginRight: 10 }}
         onClick={deployScout}>
 
@@ -58,7 +71,7 @@ const Board = (props) => {
 
         </div>
 
-        <div className="column" style={{ border: "solid", marginLeft: 10, marginRight: 10 }}>
+        <div className="column is-4" style={{ border: "solid", marginLeft: 10, marginRight: 10 }} onClick={addRifle}>
 
           <p className="title">
           AM MRS-4 Assault Rifle
@@ -71,7 +84,7 @@ const Board = (props) => {
 
         </div>
 
-        <div className="column" style={{ border: "solid", marginLeft: 10, marginRight: 10 }}>
+        <div className="column is-4" style={{ border: "solid", marginLeft: 10, marginRight: 10 }}>
 
           <p className="title">
           Smoke Grenade
@@ -81,6 +94,14 @@ const Board = (props) => {
           </p>
           <p>-1 ENEMY ATTACK POWER</p>
           <p>COST: 1 GMP</p>
+
+        </div>
+
+        <div className="column is-4" style={{ border: "solid", marginLeft: 10, marginRight: 10 }} onClick={endPhase}>
+
+          <p className="title">
+          End Turn
+          </p>
 
         </div>
 
