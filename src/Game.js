@@ -1,6 +1,26 @@
+import Scout from './Cards/Scout'
+import Rifle from './Cards/Rifle'
+
 export const Game = {
   setup: () => (
     {
+      hero: {
+        name: "Mega Man",
+        life: 4,
+        attack: 3,
+        defense: 2,
+        battery: 3
+      },
+      villain: {
+        name: "Zero",
+        life: 4,
+        attack: 3,
+        defense: 2,
+        battery: 3
+      },
+      chips: [],
+      battlefield: [],
+      selected: {},
       gmp: 4,
       power: 0,
       error: "",
@@ -9,44 +29,66 @@ export const Game = {
         name: "",
         life: 0,
         power: 0
-      },
-      rifle: false
+      }
     }
   ),
   moves: {
-    deployScout: (G, ctx) => {
-      if (G.gmp >= 3) {
-        G.gmp = G.gmp - 3
-        G.power = G.power + 3
+    select: (G, ctx, card) => {
+      if (card.type == "Active") {
 
-        G.character = {
-          deployed: true,
-          name: "Scout",
-          life: 3,
-          power: 3,
-          slots: []
-        }
-
-        G.error = ""
-      }
-      else {
-        G.error = "Not Enough GMP to Deploy Scout"
       }
     },
-    addRifle: (G, ctx) => {
-      if (G.gmp >= 2 && G.character.deployed) {
-        G.gmp = G.gmp - 2
-        G.power = G.power + 2
+    chip: (G, ctx, chip) => {
+      if (chip.type == "Buff") {
+        G.hero.attack += chip.boost
+      }
+      else if (chip.type == "Debuff") {
+        G.villain.attack -= chip.boost
+      }
+    },
+    deployCharacter: (G, ctx, card) => {
+      if (G.gmp >= card.cost && !card.deployed) {
+        G.gmp -= card.cost
+        G.power += card.power
 
-        G.rifle = true
+        card.deployed = true
+
+        G.battlefield = [
+          ...G.battlefield,
+          card
+        ]
 
         G.error = ""
       }
-      else if (G.character.deployed == false) {
+      else if (card.deployed) {
+        G.error = `${card.name} Already Deployed`
+      }
+      else if (G.gmp < card.cost) {
+        G.error = `Not Enough GMP to Deploy ${card.name}`
+      }
+    },
+    addWeapon: (G, ctx, card, character) => {
+      if (G.gmp >= card.cost && !card.deployed && character.deployed) {
+        G.gmp -= card.cost
+        G.power += card.power
+
+        card.deployed = true
+
+        G.battlefield = [
+          ...G.battlefield,
+          card
+        ]
+
+        G.error = ""
+      }
+      else if (!character.deployed) {
         G.error = "No Character to Equip Item To"
       }
-      else if (G.gmp < 2) {
-        G.error = "Not Enough GMP to Add Weapon"
+      else if (card.deployed) {
+        G.error = `${card.name} already equipped`
+      }
+      else if (G.gmp < card.cost) {
+        G.error = `Not Enough GMP to Add ${card.name}`
       }
     }
   },
@@ -55,10 +97,21 @@ export const Game = {
     playerTurn: {
       start: true,
       onBegin: (G, ctx) => {
+        G.error = ""
         G.gmp++
-        if (G.rifle) {
-          G.power = G.power - 2
-        }
+        // G.battlefield = G.battlefield.map((card) => {
+        //   let deployment = card.deployed
+        //   if (card.type === "Active") {
+        //     deployment = false //remove all Active cards
+        //   }
+        //   return (
+        //     {
+        //       ...card,
+        //       deployed: deployment
+        //     }
+        //   )
+        // })
+        G.battlefield = G.battlefield.filter(card => card.type == "Passive")
       },
       onEnd: (G, ctx) => {
 
@@ -67,7 +120,7 @@ export const Game = {
     },
     enemyTurn: {
       onBegin: (G, ctx) => {
-
+        G.error = ""
       },
       onEnd: (G, ctx) => {
 
@@ -75,4 +128,16 @@ export const Game = {
       next: 'playerTurn'
     }
   }
+
+  // ai: {
+    // enumerate: (G, ctx) => {
+      // let moves = [];
+      // for (let i = 0; i < 9; i++) {
+      //   if (G.cells[i] === null) {
+      //     moves.push({ move: 'clickCell', args: [i] })
+      //   }
+      // }
+      // return moves
+    // }
+  // }
 };

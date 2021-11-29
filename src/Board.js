@@ -1,36 +1,29 @@
 import React from 'react'
+import Card from './Card'
+import Scout from './Cards/Scout'
+import Rifle from './Cards/Rifle'
 
 const Board = (props) => {
-  let scout = {
-    life: 3,
-    attack: 3,
-    cost: 3
-  }
-
-  let rifle = {
-    attack: 2,
-    cost: 2
-  }
-
-  let grenade = {
-    attack: 1,
-    cost: 1
-  }
-
   const deployScout = (event) => {
     event.preventDefault()
-    props.moves.deployScout()
+    props.moves.deployCharacter(Scout)
   }
 
   const addRifle = (event) => {
     event.preventDefault()
-    props.moves.addRifle()
+    props.moves.addWeapon(Rifle, Scout)
   }
 
   const endPhase = (event) => {
     event.preventDefault()
     props.events.endPhase()
   }
+
+  const battlefield = props.G.battlefield.map((card) => {
+    return (
+      <Card card={card} />
+    )
+  })
 
   return (
     <div>
@@ -52,6 +45,10 @@ const Board = (props) => {
     </section>
 
     <div style={{ padding: 10 }}>
+
+      <div className="columns is-multiline">
+        {battlefield}
+      </div>
 
 
       <div className="columns is-multiline">
