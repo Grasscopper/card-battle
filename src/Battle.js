@@ -4,6 +4,7 @@ import Ability from './Ability'
 import Ability2 from './Ability2'
 import Chip from './Chip'
 import UsedChip from './UsedChip'
+import Outcome from './Outcome'
 
 const Battle = (props) => {
   const sendChip = (receivedChip) => {
@@ -72,13 +73,18 @@ const Battle = (props) => {
     </button>
   }
 
+  let outcome = <div className="column is-4" />
+  if (props.ctx.phase === "battle") {
+    outcome = <Outcome game={props.G} hero={props.G.hero} villain={props.G.villain} />
+  }
+
   return (
     <div style={{ padding: 20 }}>
       <div className="columns is-multiline">
         <Card character={props.G.hero} />
         <div className="column is-4" />
         <Card character={props.G.villain} />
-        <div className="column is-4" />
+        {outcome}
       </div>
       <div className="buttons">
       {beginButton}
