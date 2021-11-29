@@ -1,8 +1,7 @@
-import React from 'react'
 import { Client } from 'boardgame.io/react'
-import { Game } from './Game'
-import Board from './Board'
+import { NewGame } from './NewGame'
+import Battle from './Battle'
 
-const CardGame = Client({ game: Game, board: Board, numPlayers: 2, debug: true })
+const CardGame = Client({ game: NewGame, board: Battle, numPlayers: 2, debug: true })
 
 export default CardGame
