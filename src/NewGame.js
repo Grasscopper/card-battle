@@ -88,12 +88,12 @@ export const NewGame = {
     outcome: (G, ctx, hero, villain) => {
       let damage = 0
       if (hero.attack > villain.attack) { //hero wins, villain receives damage
-        damage = hero.attack - villain.attack + G.addedVillainDef
+        damage = hero.attack - villain.attack - G.addedVillainDef
         G.villain.life -= damage
         if (G.villain.life < 0) G.villain.life = 0
       }
       else if (villain.attack > hero.attack) { //villain wins, hero receieves damage
-        damage = villain.attack - hero.attack + G.addedHeroDef
+        damage = villain.attack - hero.attack - G.addedHeroDef
         G.hero.life -= damage
         if (G.hero.life < 0) G.hero.life = 0
       }
